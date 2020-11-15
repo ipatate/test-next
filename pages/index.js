@@ -1,8 +1,9 @@
 import Head from "next/head";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 
-export default function Home({ posts }) {
+export default function Home({ entries }) {
   return (
     <>
       <Head>
@@ -10,19 +11,13 @@ export default function Home({ posts }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col max-w-6xl mx-auto">
-        <Image
-          src="/20160816_095755_resized.jpg"
-          alt="Picture of the author"
-          unsized
-          layout="responsive"
-        />
-        {posts.map((p) => (
+        {entries.map((p) => (
           <div key={p.id} className="flex flex-col m-4">
-            <h1 className="text-lg font-bold mb-2">
-              <Link href={`/blog/${p.id}`}>{p.title}</Link>
+            <h1 className="mb-2 text-lg font-bold">
+              <Link href={p.uri}>{p.title}</Link>
             </h1>
-            <p>{p.body}</p>
-            <Link passHref href={`/blog/${p.id}`}>
+            <div dangerouslySetInnerHTML={{ __html: p.body }} />
+            <Link passHref href={p.uri}>
               <a className="underline text-blue justify-self-end">See more</a>
             </Link>
           </div>
@@ -35,15 +30,24 @@ export default function Home({ posts }) {
 
 // This function gets called at build time
 export async function getStaticProps() {
-  // Call an external API endpoint to get posts
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await res.json();
-
-  // By returning { props: posts }, the Blog component
-  // will receive `posts` as a prop at build time
+  // axios query with graphql
+  const { data } = await axios.post(process.env.API_URL, {
+    query: `
+            query BlogPosts {
+                entries( type: "blog") {
+                    ...on blog_blog_Entry {
+                    id
+                    title
+                    body
+                    uri
+                }
+            }
+        }
+        `,
+  });
   return {
     props: {
-      posts,
+      entries: data.data.entries,
     },
   };
 }
