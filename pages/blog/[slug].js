@@ -54,13 +54,13 @@ export async function getStaticProps({ params, preview, previewData }) {
     },
     { headers }
   );
-  console.log(headers, preview);
+
   const { status } = data.data.entry;
   const display =
     status === "live" ? true : status === "disabled" && preview ? true : false;
 
   return {
-    notFound: !display,
+    // notFound: !display,
     props: {
       entry: data.data.entry,
     },
@@ -87,5 +87,5 @@ export async function getStaticPaths() {
   const paths = entries.map((entry) => `/${entry.uri}`);
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
