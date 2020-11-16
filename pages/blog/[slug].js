@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 export default function Post({ entry }) {
-  if (!entry || !entry.title) {
+  if (!entry) {
     return <Error statusCode={404} />;
   }
   return (
@@ -65,7 +65,7 @@ export async function getStaticProps({ params, preview, previewData }) {
   return {
     notFound: !display,
     props: {
-      entry: data.data.entry,
+      entry: display ? data.data.entry : null,
     },
   };
 }
