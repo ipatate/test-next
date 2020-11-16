@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import DefaultErrorPage from "next/error";
+import Error from "next/error";
 import { useRouter } from "next/router";
 import axios from "axios";
 
 export default function Post({ entry }) {
+  if (!entry || !entry.title) {
+    return <Error statusCode={404} />;
+  }
   return (
     <>
       {entry ? (
