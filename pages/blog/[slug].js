@@ -29,7 +29,6 @@ export default function Post({ entry }) {
 export async function getStaticProps({ params, preview, previewData }) {
   let headers = {};
   const { slug } = params;
-  console.log(preview, previewData);
   if (preview && previewData) {
     headers = {
       "x-Craft-Token": previewData.previewToken
@@ -59,13 +58,9 @@ export async function getStaticProps({ params, preview, previewData }) {
   const { status } = data.data.entry;
   const display =
     status === "live" ? true : status === "disabled" && preview ? true : false;
-  if (display === false) {
-    return {
-      notFound: true,
-      props: {},
-    };
-  }
+
   return {
+    notFound: !display,
     props: {
       entry: data.data.entry,
     },
@@ -90,7 +85,6 @@ export async function getStaticPaths() {
   const { entries } = data.data;
   // Get the paths we want to pre-render based on posts
   const paths = entries.map((entry) => `/${entry.uri}`);
-
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
