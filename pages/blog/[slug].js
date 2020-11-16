@@ -72,7 +72,7 @@ export async function getStaticPaths() {
   const { data } = await axios.post(process.env.API_URL, {
     query: `
             query BlogPosts {
-                entries( type: "blog", status: ["live", "disabled"]) {
+                entries( type: "blog") {
                     ...on blog_blog_Entry {
                     uri
                     status
