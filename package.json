@@ -6,11 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
-    "start": "next start"
+    "start": "next start",
+    "postbuild": "next-on-netlify"
   },
   "dependencies": {
     "axios": "^0.21.0",
     "next": "10.0.0",
+    "next-on-netlify": "^2.6.1",
     "react": "17.0.1",
     "react-dom": "17.0.1"
   },
