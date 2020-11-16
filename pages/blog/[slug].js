@@ -60,7 +60,7 @@ export async function getStaticProps({ params, preview, previewData }) {
     status === "live" ? true : status === "disabled" && preview ? true : false;
 
   return {
-    // notFound: !display,
+    notFound: !display,
     props: {
       entry: data.data.entry,
     },
